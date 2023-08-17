@@ -1,33 +1,13 @@
 module( "GDebug", package.seeall )
 
 --[[---------------------------------------------------------
-Name: GetServerIP()
-Desc: Gets the real IP with port of the server.
-Returns: serverIP (string, formatted)
------------------------------------------------------------]]
-function GetServerIP()
-	if game.SinglePlayer() then return end
-
-	local hex = 0x000000FF
-	local hostIP = GetConVarString( "hostip" )
-	local IPTable = {
-		bit.band( bit.rshift( hostIP, 24 ), hex ),
-		bit.band( bit.rshift( hostIP, 16 ), hex ),
-		bit.band( bit.rshift( hostIP, 8 ), hex ),
-		bit.band( hostIP, hex )
-	}
-
-	return string.format( "%d.%d.%d.%d:%s", IPTable[1], IPTable[2], IPTable[3], IPTable[4], GetConVarString( "hostport" ) )
-end
-
---[[---------------------------------------------------------
 Name: CheckForUpdates
 Desc: Checks for an update.
 -----------------------------------------------------------]]
 function CheckForUpdates()
 	if game.SinglePlayer() then return end
 
-	http.Fetch( "http://raw.github.com/ptown2/GLMVS/master/lua/modules/glmvs/shared.lua",
+	http.Fetch( "http://raw.github.com/Alex9914/GLMVS_Fixed/master/lua/modules/glmvs/shared.lua",
 	function( str )
 		if not str then return end
 
@@ -72,42 +52,13 @@ function CompareTwoVerVals( latest, current )
 end
 
 --[[---------------------------------------------------------
-Name: OptToListing
-Desc: Sends your server info for server listing.
------------------------------------------------------------]]
-function OptToListing()
-	if game.SinglePlayer() or GLMVS.OptOutListing then return end
-
-	local isPassworded = GetConVar("sv_password"):GetString() ~= ""
-	local gamemodename = GetConVarString("gamemode")
-
-	http.Post( "http://ptown2.0fees.net/glmvsreport.php", {
-		serverip	= GetServerIP(),
-		servername	= GetHostName(),
-		gmname		= gamemodename or "None",
-		version		= GLMVS.GLVersion,
-		dedicated	= game.IsDedicated() and "TRUE" or "FALSE",
-		passworded	= isPassworded and "TRUE" or "FALSE"
-	}, 
-	function( str )
-		if not str then return end
-
-		NotifyByConsole( 1, "GLMVS has sent server info for listing!" )
-		NotifyByConsole( 1, str )
-	end,
-	function()
-		NotifyByConsole( 3, "Failed to send server info." )
-	end )
-end
-
---[[---------------------------------------------------------
 Name: PrintMapTable
 Desc: Debugging
 -----------------------------------------------------------]]
 function PrintMapTable( pl )
 	if not pl:IsPlayer() then return end
 	if not Contributors[ pl:UniqueID() ] then return end
-	
+
 	PrintTable( GLMVS.MapList )
 end
 CMD.AddConCmd( "glmvs_printmaps", PrintMapTable )

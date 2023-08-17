@@ -7,7 +7,7 @@ MapIncludes		= {}
 Gamemodes		= {}
 
 -- Shared Setting Vars
-GLVersion		= "1.0.3"
+GLVersion		= "1.0.4"
 CurrentMap		= string.lower( game.GetMap() )
 TotalVotes		= 0
 

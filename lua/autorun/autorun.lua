@@ -45,7 +45,6 @@ hook.Add( "Initialize", "GLMVS_LoadEverything", function()
 
 		-- Run the debugging functions.
 		GDebug.CheckForUpdates()
-		GDebug.OptToListing()
 
 		-- Count the map early.
 		GLMVS.AddToRecentMaps( GLMVS.CurrentMap )
@@ -59,7 +58,7 @@ hook.Add( "Initialize", "GLMVS_LoadEverything", function()
 		GLoader.RegisterLuaFiles( "vgui", true )
 
 		if ( folderpack and folderlayout ) and ( folderpack ~= "" ) and ( folderlayout ~= "" ) then
-			GLoader.RegisterLuaFiles( "vgui/".. string.lower( folderpack ), true )
+			GLoader.RegisterLuaFiles( "vgui/" .. string.lower( folderpack ), true )
 		else
 			GLoader.RegisterLuaFiles( "vgui/pack_default", true )
 		end
