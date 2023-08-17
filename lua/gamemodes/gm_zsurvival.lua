@@ -19,6 +19,10 @@ function GAME:OnInitPostEntity()
 	self.RoundPlay = self.RoundPlay + 1
 end
 
+hook.Add( "RestartRound", "GLMVS_RoundCounter", function()
+	GAME.RoundPlay = GAME.RoundPlay + 1
+end )
+
 function GAME:GetEndTime()
 	return GAMEMODE.EndGameTime
 end
