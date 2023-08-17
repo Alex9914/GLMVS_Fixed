@@ -55,7 +55,7 @@ Desc: Finds if the map exists or not.
 Returns: inversedFileExists (bool)
 -----------------------------------------------------------]]
 function IsNonExistentMap( map )
-	return not file.Exists( "maps/" ..map.. ".bsp", "MOD" )
+	return not file.Exists( "maps/" .. map .. ".bsp", "MOD" )
 end
 
 --[[---------------------------------------------------------
@@ -91,7 +91,7 @@ function AddVote( pl, mapid, votes, ovrd )
 		votes = MVotePower
 	end
 
-	local MapName = MapList[ mapid ].Name or MapList[ mapid ].Map
+--	local MapName = MapList[ mapid ].Name or MapList[ mapid ].Map
 
 	MapList[ mapid ].Votes = MapList[ mapid ].Votes + votes
 
@@ -118,7 +118,7 @@ function AddRTV( pl )
 	local rtvtimelimit = RTVWaitTime * 60
 	local canrtv, reason = CallSettingFunction( "CanPlayerRTV", pl )
 
-	if ( canrtv == nil ) and not ( canrtv == false ) then
+	if canrtv == nil and canrtv then
 		canrtv, reason = true, ""
 	end
 
@@ -132,10 +132,10 @@ function AddRTV( pl )
 		util.ChatToPlayer( pl, "You can't RTV since you already did it." )
 		return
 	elseif ( #player.GetAll() < RTVPlayerREQ ) then
-		util.ChatToPlayer( pl, "You can't RTV since it requires " ..RTVPlayerREQ.. " or more player(s)." )
+		util.ChatToPlayer( pl, "You can't RTV since it requires " .. RTVPlayerREQ .. " or more player(s)." )
 		return
 	elseif ( CurTime() < rtvtimelimit ) then
-		util.ChatToPlayer( pl, "You have to wait " ..( rtvtimelimit / 60 ).. " minutes before doing a RTV." )
+		util.ChatToPlayer( pl, "You have to wait " .. ( rtvtimelimit / 60 ) .. " minutes before doing a RTV." )
 		return
 	elseif not canrtv then
 		util.ChatToPlayer( pl, reason )
@@ -145,7 +145,7 @@ function AddRTV( pl )
 	pl.RockedAlready = true
 
 	local rtvcount, totalplys = CheckForRTV()
-	util.ChatToPlayers( pl:Name().. " has decided to RTV. Requires " ..( totalplys - rtvcount ).. " more RTV votes. Type /rtv to vote!" )
+	util.ChatToPlayers( pl:Name() .. " has decided to RTV. Requires " .. ( totalplys - rtvcount ) .. " more RTV votes. Type /rtv to vote!" )
 end
 
 --[[---------------------------------------------------------
@@ -153,7 +153,14 @@ Name: CheckForRTV
 Desc: Checks if a RTV is going to be made.
 -----------------------------------------------------------]]
 function CheckForRTV()
-	local rtvcount, totalplys = 0, math.ceil( #player.GetAll() * math.max( 0, math.min( 1, RTVThreshold ) ) )
+	local rtvcount = 0
+	local totalplys = 0
+
+	for _, ply in pairs(player.GetAll()) do
+		if not ply:IsBot() then
+			totalplys = totalplys + 1
+		end
+	end
 
 	for _, pl in pairs( player.GetAll() ) do
 		if pl.RockedAlready then
@@ -168,7 +175,7 @@ function CheckForRTV()
 			local timeleft = CallSettingFunction( "GetEndTime" ) or 30
 
 			CallSettingFunction( "OnRTVSuccess" )
-			util.ChatToPlayers( "Limit reached to RTV. Changing the map in ".. timeleft .." seconds." )
+			util.ChatToPlayers( "Limit reached to RTV. Changing the map in " .. timeleft .. " seconds." )
 			GLMVS_ForcedStartVote()
 		end )
 	end

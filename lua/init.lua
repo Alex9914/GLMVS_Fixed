@@ -23,7 +23,7 @@ local function MentionNextMap( pl )
 		winner = "nil"
 	end
 
-	util.ChatToPlayers( pl:Name().. ", the next map is " ..winner )
+	util.ChatToPlayers( pl:Name() .. ", the next map is " .. winner )
 end
 
 
@@ -57,7 +57,7 @@ function GLMVS_AddVote( pl, cmd, args )
 		util.ChatToPlayer( pl, "You can't vote for the map that you're currently playing on." )
 		return
 	elseif GLMVS.MapList[ MapNum ].MinPlayers and ( math.floor( GLMVS.MapList[ MapNum ].MinPlayers * PReqMult ) > GLMVS.MaxPlayerCount ) then
-		util.ChatToPlayer( pl, "That map you selected requires " ..math.floor( GLMVS.MapList[ MapNum ].MinPlayers * PReqMult ).. " or more players." )
+		util.ChatToPlayer( pl, "That map you selected requires " .. math.floor( GLMVS.MapList[ MapNum ].MinPlayers * PReqMult ) .. " or more players." )
 		return
 	end
 
@@ -96,7 +96,7 @@ function GLMVS_StartVote( ... )
 	GLMVS.EndHookCalled = true
 	GLMVS.CallSettingFunction( "OnStartVote" )
 
-	timer.Simple( math.floor( ( ( GLMVS.CallSettingFunction( "GetEndTime" ) or 0 ) * 0.15 ) ), function()
+	timer.Simple( math.floor( ( GLMVS.CallSettingFunction( "GetEndTime" ) or 0 ) * 0.15 ), function()
 		GLMVS.OpenMapVote()
 	end )
 end
@@ -107,7 +107,7 @@ function GLMVS_ForcedStartVote()
 	GLMVS.EndHookCalled = true
 	GLMVS.CallSettingFunction( "OnStartVote" )
 
-	timer.Simple( math.floor( ( ( GLMVS.CallSettingFunction( "GetEndTime" ) or 0 ) * 0.15 ) ), function()
+	timer.Simple( math.floor( ( GLMVS.CallSettingFunction( "GetEndTime" ) or 0 ) * 0.15 ), function()
 		GLMVS.OpenMapVote()
 	end )
 end
@@ -128,7 +128,7 @@ end
 if ( table.Count( GLMVS.MapList ) > 1 ) then
 	CMD.AddCmdChat( "nextmap", MentionNextMap )
 	CMD.AddCmdChat( "votemap", function( pl ) pl:ConCommand("glmvs_openvote") end )
-	CMD.AddCmdChat( "glversion", function( pl ) util.ChatToPlayer( pl, "The GLMVS version this server uses is: v".. GLMVS.GLVersion ) end )
+	CMD.AddCmdChat( "glversion", function( pl ) util.ChatToPlayer( pl, "The GLMVS version this server uses is: v" .. GLMVS.GLVersion ) end )
 	CMD.AddCmdChat( "rtv", function( pl ) GLMVS.AddRTV( pl ) end )
 
 	CMD.AddConCmd( "glmvs_vote", GLMVS_AddVote )
